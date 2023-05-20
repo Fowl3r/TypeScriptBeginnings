@@ -1,85 +1,33 @@
-// Type Aliases
-type stringOrNumber = string | number;
+type One = string;
+type Two = string | number;
+type Three = 'hello';
 
-type stringOrNumberArray = (string | number)[];
+// convert to more or less specific
+let a: One = 'hello';
+let b: Two = a as Two ; // less specific type
+let c = a as Three; // more specific
 
+// angle brackets cannot be used in tsx files (i.e. with react)
+let d = <One>'world'
+let e = <string | number>'world'
 
-type Guitarist = {
-    name?: string,
-    active: boolean,
-    albums: (string | number)[]
-};
-
-type UserId = stringOrNumber; 
-
-type PostId = stringOrNumber; 
-
-// Literal Types
-
-let myName: 'Tom';
-
-let userName: 'Tom' | 'John' | 'Amy';
-
-userName = 'Amy';
-
-// functions
-const add = (a:number , b:number): number => {
-    return a + b
+const addOrConcat = (a: number, b: number, c: 'add' | 'concat'): number | string => {
+    if( c === 'add') return a + b;
+    return '' + a + b;
 }
 
-// any function that does not return anything should be type void
-const logMsg = (message: any) => {
-    console.log(message);
-}
+let myVal: string = addOrConcat(2,2,'concat') as string;
 
-logMsg('Hello');
-logMsg(add(2,3));
+// Be careful! TS sees no prob - but a string is returned
+let nextVal: number = addOrConcat(2,2,'concat') as number;
 
-let subtract = function (c: number, d:number) :number {
-    return c - d;
-}
+// 10 as string
+(10 as unknown) as string
 
-type mathFunction = (a:number, b:number) => number ; 
-// interface mathFunction {
-//     (a:number, b:number) : number ; 
-// } 
+// The DOM
+const img = document.querySelector('img')!;
+const myImg = document.getElementById('#img') as HTMLImageElement;
+const nextImg = <HTMLImageElement>document.getElementById('#img');
 
-let multiply: mathFunction = function (c,d) {
-    return c * d;
-}
-
-logMsg(multiply( 2, 2));
-
-// optional params - must be last in list, required params must be first
-const addAll = (a:number, b: number, c?:number):number => {
-    // type guard
-    if (typeof c !== 'undefined'){
-        return a + b + c;
-    }
-    return a + b; 
-}
-
-// default value, does not need to be last in line
-const sumAll = (a:number = 10, b: number, c:number = 2):number => {
-        return a + b + c;
-}
-
-logMsg(addAll(2,3,2));
-logMsg(addAll(2,3));
-// must explicitly say undefined to use default values at front param positions
-logMsg(sumAll(undefined,3));
-
-// Rest params ...rest/spread operator using the rest of the params or spreading out the rest of the params, if used with other params must be the last one
-const total = (a:number, ...nums: number[]):number => {
-    return a +  nums.reduce((prev, curr) => prev + curr)
-}
-
-logMsg(total(1,2,4))
-
-// Never type
-const createError = (errMsg: string) => {
-    throw new Error(errMsg);
-}
-
-
-
+img.src
+myImg.src
