@@ -1,56 +1,50 @@
 "use strict";
-let stringArr = ['one', 'hey', 'Dave'];
-let gutiars = ['strat', 'Les Paul', 5150];
-let mixedData = ['EVH', 1984, true];
-stringArr[0] = 'Tim';
-stringArr.push('hey');
-gutiars[0] = 1984;
-gutiars.unshift('Jim');
-let test = [];
-let bands = [];
-bands.push('MCR');
-// Tuple
-let myTuple = ['Dave', 9, false];
-let mixed = ['John', 1, false];
-myTuple[1] = 42;
-//  Objects 
-let myObj;
-myObj = [];
-console.log(typeof myObj);
-myObj = bands;
-myObj = {};
-const exampleObj = {
-    prop1: 'Dave',
-    prop2: true,
+// Literal Types
+let myName;
+let userName;
+userName = 'Amy';
+// functions
+const add = (a, b) => {
+    return a + b;
 };
-exampleObj.prop1 = 'John';
-;
-let evh = {
-    name: 'Eddie',
-    active: false,
-    albums: [1984, 5150, 'OU812']
+// any function that does not return anything should be type void
+const logMsg = (message) => {
+    console.log(message);
 };
-let jp = {
-    name: 'jimmy',
-    active: true,
-    albums: ['I', 'II', 'IV']
+logMsg('Hello');
+logMsg(add(2, 3));
+let subtract = function (c, d) {
+    return c - d;
 };
-const greetGuitarist = (guitarist) => {
-    var _a;
-    if (guitarist.name) {
-        return `Hello ${(_a = guitarist.name) === null || _a === void 0 ? void 0 : _a.toUpperCase()}!`;
+// interface mathFunction {
+//     (a:number, b:number) : number ; 
+// } 
+let multiply = function (c, d) {
+    return c * d;
+};
+logMsg(multiply(2, 2));
+// optional params - must be last in list, required params must be first
+const addAll = (a, b, c) => {
+    // type guard
+    if (typeof c !== 'undefined') {
+        return a + b + c;
     }
-    return 'Hello!';
+    return a + b;
 };
-console.log(greetGuitarist(jp));
-// ENUMS
-// "Unlike most TypeScript features, Enums are not a type-level addition to JavaScript but something added to the language and runtime."
-var Grade;
-(function (Grade) {
-    Grade[Grade["U"] = 1] = "U";
-    Grade[Grade["D"] = 2] = "D";
-    Grade[Grade["C"] = 3] = "C";
-    Grade[Grade["B"] = 4] = "B";
-    Grade[Grade["A"] = 5] = "A";
-})(Grade || (Grade = {}));
-console.log(Grade.U);
+// default value, does not need to be last in line
+const sumAll = (a = 10, b, c = 2) => {
+    return a + b + c;
+};
+logMsg(addAll(2, 3, 2));
+logMsg(addAll(2, 3));
+// must explicitly say undefined to use default values at front param positions
+logMsg(sumAll(undefined, 3));
+// Rest params ...rest/spread operator using the rest of the params or spreading out the rest of the params, if used with other params must be the last one
+const total = (a, ...nums) => {
+    return a + nums.reduce((prev, curr) => prev + curr);
+};
+logMsg(total(1, 2, 4));
+// Never type
+const createError = (errMsg) => {
+    throw new Error(errMsg);
+};

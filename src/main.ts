@@ -1,76 +1,85 @@
-let stringArr = ['one', 'hey', 'Dave'];
+// Type Aliases
+type stringOrNumber = string | number;
 
-let gutiars = ['strat', 'Les Paul', 5150];
+type stringOrNumberArray = (string | number)[];
 
-let mixedData = ['EVH', 1984, true];
 
-stringArr[0] = 'Tim';
-stringArr.push('hey');
-
-gutiars[0] = 1984;
-gutiars.unshift('Jim');
-
-let test = [];
-let bands: string[] = [];
-bands.push('MCR');
-
-// Tuple
-let myTuple: [string,number,boolean] = ['Dave', 9 , false];
-
-let mixed = ['John', 1, false];
-
- myTuple[1] = 42 ;
-
-//  Objects 
-let myObj : object;
-myObj = [];
-console.log(typeof myObj)
-myObj = bands ;
-myObj = {};
-
-const exampleObj = {
-    prop1: 'Dave',
-    prop2: true,
-}
-
-exampleObj.prop1 = 'John';
-
-interface Guitarist {
+type Guitarist = {
     name?: string,
     active: boolean,
     albums: (string | number)[]
 };
 
-let evh: Guitarist = {
-    name: 'Eddie',
-    active: false,
-    albums: [1984, 5150, 'OU812']
+type UserId = stringOrNumber; 
+
+type PostId = stringOrNumber; 
+
+// Literal Types
+
+let myName: 'Tom';
+
+let userName: 'Tom' | 'John' | 'Amy';
+
+userName = 'Amy';
+
+// functions
+const add = (a:number , b:number): number => {
+    return a + b
 }
 
-let jp: Guitarist = {
-    name:'jimmy',
-    active: true,
-    albums:['I','II','IV']
+// any function that does not return anything should be type void
+const logMsg = (message: any) => {
+    console.log(message);
 }
 
-const greetGuitarist = (guitarist: Guitarist) => {
-    if(guitarist.name){
-        return `Hello ${guitarist.name?.toUpperCase()}!`
+logMsg('Hello');
+logMsg(add(2,3));
+
+let subtract = function (c: number, d:number) :number {
+    return c - d;
+}
+
+type mathFunction = (a:number, b:number) => number ; 
+// interface mathFunction {
+//     (a:number, b:number) : number ; 
+// } 
+
+let multiply: mathFunction = function (c,d) {
+    return c * d;
+}
+
+logMsg(multiply( 2, 2));
+
+// optional params - must be last in list, required params must be first
+const addAll = (a:number, b: number, c?:number):number => {
+    // type guard
+    if (typeof c !== 'undefined'){
+        return a + b + c;
     }
-    return 'Hello!'
+    return a + b; 
 }
 
-console.log(greetGuitarist(jp))
-
-// ENUMS
-// "Unlike most TypeScript features, Enums are not a type-level addition to JavaScript but something added to the language and runtime."
-
-enum Grade {
-    U = 1,
-    D,
-    C,
-    B,
-    A,
+// default value, does not need to be last in line
+const sumAll = (a:number = 10, b: number, c:number = 2):number => {
+        return a + b + c;
 }
 
-console.log(Grade.U)
+logMsg(addAll(2,3,2));
+logMsg(addAll(2,3));
+// must explicitly say undefined to use default values at front param positions
+logMsg(sumAll(undefined,3));
+
+// Rest params ...rest/spread operator using the rest of the params or spreading out the rest of the params, if used with other params must be the last one
+const total = (a:number, ...nums: number[]):number => {
+    return a +  nums.reduce((prev, curr) => prev + curr)
+}
+
+logMsg(total(1,2,4))
+
+// Never type
+const createError = (errMsg: string) => {
+    throw new Error(errMsg);
+}
+
+
+
