@@ -1,21 +1,49 @@
-import Heading from "./components/Heading";
-import { Section } from "./components/Section";
-import Counter from "./components/Counter";
-import { useState } from "react";
-import List from "./components/List";
+import {useState, useCallback, useMemo, useEffect, useRef, MouseEvent, KeyboardEvent} from 'react';
 
+
+interface User {
+  id:number,
+  username: string,
+}
+
+type fibFunc = (n: number) => number
+
+const fib: fibFunc = (n) => {
+  if (n < 2) return n
+  return fib(n - 1) + fib(n -2)
+}
+
+const myNum: number = 37
 
 function App() {
-  const [count, setCount] = useState<number>(1);
+  const [count,setCount] = useState<number>(0);
+  const [users,setUsers] = useState<User[] | null>(null);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  console.log(inputRef?.current);
+  console.log(inputRef?.current?.value);
+  
+  // in React 18 in strict mode this will mount twice
+  useEffect(() => {
+    console.log('mounting');
+    console.log('Users: ', users);
+
+    // this would mount once as it is a clean up function
+    return () => console.log('mounting');
+  },[users])
+
+  const addTwo = useCallback((e: MouseEvent<HTMLButtonElement> | KeyboardEvent<KeyboardEvent>): void => setCount(prev => prev + 2),[] )
+
+  const result = useMemo(() => fib(myNum), [myNum]);
+
   return (
-    <>
-    <Heading title={"Hello"} />
-    <Section title={"A Whole different title"}>
-      This is my Section.
-    </Section>
-    <Counter setCount={setCount} >Count is:  {count}</Counter>
-    <List items={["☕ Cofee ","🌮 Tacos","🧑🏾‍💻 Code"]} render={(item: string) => <span className="bold">{item}</span>} />
-    </>
+    <div className="App">
+      <h1>{count}</h1>
+      <button onClick={addTwo}>Add</button>
+      <h2>{result}</h2>
+      <input ref={inputRef} type="text" />
+    </div>
   )
 }
 
